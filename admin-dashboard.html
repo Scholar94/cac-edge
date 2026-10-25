@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Admin Dashboard — CAC Good Works Assembly</title>
+  <link rel="preload" href="font-jost-latin.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="font-cinzel-latin.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="font-cormorant-latin.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="icons-solid.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="icons-regular.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="icons-brands.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="stylesheet" href="fonts.css"/>
+  <link rel="stylesheet" href="icons.css"/>
+  <link rel="icon" href="icon-64.png" type="image/png" sizes="64x64"/>
+  <link rel="stylesheet" href="admin-style.css">
+  <meta name="robots" content="noindex,nofollow"/>
+<script src="csp-events.js"></script>
+</head>
+<body>
+
+<!-- Auth guard: page stays hidden until Firebase confirms a registered admin. Real enforcement is in firestore.rules. -->
+<style>body{visibility:hidden}body.authed{visibility:visible}</style>
+<script src="config.js"></script>
+<script src="admin-guard.js"></script>
+
+<!-- Mobile sidebar toggle -->
+<button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+  <i class="fas fa-bars"></i>
+</button>
+
+<div class="admin-wrapper">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="sidebar-header">
+      <img class="sidebar-emblem-img" src="logo-mark.webp" width="40" height="40" alt="" decoding="async">
+      <div class="sidebar-church">
+        <span class="sidebar-church-name">CAC Good Works</span>
+        <span class="sidebar-church-sub">Admin Panel</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Main</div>
+      <button type="button" class="sidebar-nav-link active" data-on-click="showPanel('dashboard')"><i class="fas fa-chart-line"></i> Dashboard</button>
+      <div class="nav-section-title">Content</div>
+      <button type="button" class="sidebar-nav-link" data-on-click="showPanel('devotionals')"><i class="fas fa-book-bible"></i> Devotionals</button>
+      <button type="button" class="sidebar-nav-link" data-on-click="showPanel('bbc')"><i class="fas fa-graduation-cap"></i> Bible College</button>
+      <button type="button" class="sidebar-nav-link" data-on-click="showPanel('sermons')"><i class="fas fa-video"></i> Video Sermons</button>
+      <button type="button" class="sidebar-nav-link" data-on-click="showPanel('audio')"><i class="fas fa-headphones"></i> Audio Sermons</button>
+      <button type="button" class="sidebar-nav-link" data-on-click="showPanel('gallery')"><i class="fas fa-images"></i> Gallery</button>
+      <button type="button" class="sidebar-nav-link" data-on-click="showPanel('events')"><i class="fas fa-calendar-alt"></i> Events</button>
+      <div class="nav-section-title">People</div>
+      <button type="button" class="sidebar-nav-link" data-on-click="showPanel('prayers')"><i class="fas fa-hands-praying"></i> Prayer Requests</button>
+      <button type="button" class="sidebar-nav-link" data-on-click="showPanel('testimonies')"><i class="fas fa-star"></i> Testimonies</button>
+      <button type="button" class="sidebar-nav-link" data-on-click="showPanel('visitors')"><i class="fas fa-user-plus"></i> Visitors</button>
+      <button type="button" class="sidebar-nav-link" data-on-click="showPanel('giving')"><i class="fas fa-hand-holding-heart"></i> Giving</button>
+      <button type="button" class="sidebar-nav-link" data-on-click="showPanel('rsvp')"><i class="fas fa-ticket"></i> RSVPs &amp; check-in</button>
+      <button type="button" class="sidebar-nav-link" data-on-click="showPanel('live')"><i class="fas fa-tower-broadcast"></i> Live service</button>
+      <button type="button" class="sidebar-nav-link" data-on-click="showPanel('backup')"><i class="fas fa-file-arrow-down"></i> Backup</button>
+      <button type="button" class="sidebar-nav-link" data-on-click="showPanel('activity')"><i class="fas fa-clipboard-list"></i> Activity Log</button>
+      <button type="button" class="sidebar-nav-link" data-on-click="showPanel('livestream')"><i class="fas fa-broadcast-tower"></i> Livestream</button>
+      <div class="nav-section-title">Settings</div>
+      <button type="button" class="sidebar-nav-link" data-on-click="showPanel('settings')"><i class="fas fa-cog"></i> Settings</button>
+      <a href="index.html" class="sidebar-nav-link"><i class="fas fa-globe"></i> View Website</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="admin-user">
+        <div class="admin-avatar">A</div>
+        <div class="admin-info">
+          <span class="admin-name">Administrator</span>
+          <span class="admin-role">Super Admin</span>
+        </div>
+      </div>
+      <button class="logout-btn" data-on-click="doLogout()"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <span class="topbar-title" id="topbarTitle">Dashboard</span>
+      <div class="topbar-right">
+        <div class="topbar-notif" title="Notifications">
+          <i class="fas fa-bell"></i>
+          <span class="notif-badge" id="notifBadge">0</span>
+        </div>
+        <span class="topbar-date" id="topbarDate"></span>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- ===== DASHBOARD PANEL ===== -->
+      <div class="panel active" id="panel-dashboard">
+        <h2 class="panel-title">Dashboard Overview</h2>
+        <p class="panel-sub">Welcome back, Administrator. Here's what's happening at CAC Good Works Assembly.</p>
+        <div class="stat-cards">
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <span class="stat-card-title">Video Sermons</span>
+              <div class="stat-card-icon gold"><i class="fas fa-video"></i></div>
+            </div>
+            <div class="stat-card-num" id="statSermons">—</div>
+            <div class="stat-card-change">Total uploaded</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <span class="stat-card-title">Audio Sermons</span>
+              <div class="stat-card-icon blue"><i class="fas fa-headphones"></i></div>
+            </div>
+            <div class="stat-card-num" id="statAudio">—</div>
+            <div class="stat-card-change">Total uploaded</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <span class="stat-card-title">Gallery Items</span>
+              <div class="stat-card-icon green"><i class="fas fa-images"></i></div>
+            </div>
+            <div class="stat-card-num" id="statGallery">—</div>
+            <div class="stat-card-change">Images &amp; Videos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <span class="stat-card-title">Prayer Requests</span>
+              <div class="stat-card-icon purple"><i class="fas fa-hands-praying"></i></div>
+            </div>
+            <div class="stat-card-num" id="statPrayers">—</div>
+            <div class="stat-card-change">Submitted requests</div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="upload-card">
+          <div class="upload-card-title"><i class="fas fa-bolt"></i> Quick Actions</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
+            <button class="admin-btn primary" data-on-click="showPanel('sermons')"><i class="fas fa-upload"></i> Upload Sermon</button>
+            <button class="admin-btn primary" data-on-click="showPanel('audio')"><i class="fas fa-music"></i> Upload Audio</button>
+            <button class="admin-btn primary" data-on-click="showPanel('gallery')"><i class="fas fa-image"></i> Add to Gallery</button>
+            <button class="admin-btn primary" data-on-click="showPanel('events')"><i class="fas fa-calendar-plus"></i> Add Event</button>
+            <button class="admin-btn primary" data-on-click="showPanel('prayers')"><i class="fas fa-hands-praying"></i> View Requests</button>
+            <button class="admin-btn secondary" data-on-click="showPanel('livestream')"><i class="fas fa-broadcast-tower"></i> Manage Livestream</button>
+          </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="upload-card">
+          <div class="upload-card-title"><i class="fas fa-history"></i> Recent Activity</div>
+          <div class="activity-list" id="recentActivity">
+            <div class="activity-item"><div class="activity-icon gold"><i class="fas fa-video"></i></div><div class="activity-text"><p>Sermon management system ready</p><span>Connect Firebase to see live activity</span></div></div>
+            <div class="activity-item"><div class="activity-icon gold"><i class="fas fa-star"></i></div><div class="activity-text"><p>Welcome to CAC Good Works Admin</p><span>Dashboard initialized successfully</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== VIDEO SERMONS PANEL ===== -->
+      <div class="panel" id="panel-sermons">
+        <h2 class="panel-title">Video Sermons</h2>
+        <p class="panel-sub">Upload and manage video sermon content. Supports YouTube links and direct video uploads.</p>
+        <div class="upload-card">
+          <div class="upload-card-title"><i class="fas fa-upload"></i> Upload New Sermon</div>
+          <form id="sermonUploadForm" data-on-submit="event.preventDefault(); handleSermonUpload();">
+            <div class="form-grid">
+              <div class="admin-form-group"><label>Sermon Title *</label><input type="text" id="sermonTitle" placeholder="e.g. Walking In God's Presence" required/></div>
+              <div class="admin-form-group"><label>Preacher *</label><input type="text" id="sermonPreacher" placeholder="e.g. Pastor Akin Akinbajo" required/></div>
+              <div class="admin-form-group"><label>Category</label>
+                <select id="sermonCategory">
+                  <option value="Faith">Faith</option><option value="Prayer">Prayer</option>
+                  <option value="Worship">Worship</option><option value="Family">Family</option>
+                  <option value="Evangelism">Evangelism</option><option value="Prophetic">Prophetic</option>
+                  <option value="Healing">Healing</option><option value="General">General</option>
+                </select>
+              </div>
+              <div class="admin-form-group"><label>Date</label><input type="date" id="sermonDate"/></div>
+            </div>
+            <div class="admin-form-group"><label>Description</label><textarea id="sermonDesc" rows="3" placeholder="Brief description of the sermon..."></textarea></div>
+            <div class="admin-form-group"><label>YouTube URL (or embed link)</label><input type="url" id="sermonYoutubeUrl" placeholder="https://youtube.com/watch?v=..."/></div>
+            <div class="admin-form-group"><label>Or Upload Video File</label>
+              <div class="upload-zone" id="sermonDropZone">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Click or drag video file here<br><span>MP4, MOV, AVI — Max 500MB</span></p>
+              </div>
+              <input type="file" id="sermonFileInput" accept="video/*" style="display:none;"/>
+            </div>
+            <div class="progress-bar-wrap" id="sermonProgressWrap">
+              <div class="progress-bar-track"><div class="progress-bar-fill" id="sermonProgressFill"></div></div>
+              <div class="progress-bar-label" id="sermonProgressLabel">Uploading...</div>
+            </div>
+            <button type="submit" class="admin-btn primary" id="uploadSermonBtn"><i class="fas fa-upload"></i> Upload Sermon</button>
+          </form>
+        </div>
+        <div class="upload-card">
+          <div class="upload-card-title" style="display:flex;justify-content:space-between;align-items:center;">
+            <span><i class="fas fa-list"></i> All Sermons</span>
+            <input type="text" id="sermonSearch" placeholder="Search sermons..." style="padding:8px 14px;background:var(--dark-bg);border:1px solid var(--dark-border);border-radius:8px;color:var(--white);font-size:0.85rem;width:220px;" data-on-input="filterSermons(this.value)"/>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead><tr><th scope="col">Title</th><th scope="col">Preacher</th><th scope="col">Category</th><th scope="col">Date</th><th scope="col">Actions</th></tr></thead>
+              <tbody id="sermonTableBody"><tr><td colspan="5" style="text-align:center;color:var(--white-60);padding:32px;">Loading sermons...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== AUDIO SERMONS PANEL ===== -->
+      <div class="panel" id="panel-audio">
+        <h2 class="panel-title">Audio Sermons</h2>
+        <p class="panel-sub">Upload and manage MP3 audio sermons for download and online listening.</p>
+        <div class="upload-card">
+          <div class="upload-card-title"><i class="fas fa-music"></i> Upload New Audio Sermon</div>
+          <form id="audioUploadForm" data-on-submit="event.preventDefault(); handleAudioUpload();">
+            <div class="form-grid">
+              <div class="admin-form-group"><label>Sermon Title *</label><input type="text" id="audioTitle" placeholder="Sermon title" required/></div>
+              <div class="admin-form-group"><label>Preacher *</label><input type="text" id="audioPreacher" placeholder="Preacher name" required/></div>
+              <div class="admin-form-group"><label>Category</label>
+                <select id="audioCategory">
+                  <option value="Faith">Faith</option><option value="Prayer">Prayer</option>
+                  <option value="Worship">Worship</option><option value="Family">Family</option>
+                  <option value="General">General</option>
+                </select>
+              </div>
+              <div class="admin-form-group"><label>Date</label><input type="date" id="audioDate"/></div>
+            </div>
+            <div class="admin-form-group"><label>Audio File (MP3/WAV)</label>
+              <div class="upload-zone" id="audioDropZone">
+                <i class="fas fa-headphones"></i>
+                <p>Click or drag audio file here<br><span>MP3, WAV, M4A — Max 100MB</span></p>
+              </div>
+              <input type="file" id="audioFileInput" accept="audio/*" style="display:none;"/>
+            </div>
+            <div class="admin-form-group"><label for="audioUrlInput">…or paste a direct audio link</label><input type="url" id="audioUrlInput" placeholder="https://…/sermon.mp3"/><p class="admin-hint" style="font-size:.78rem;color:var(--white-60);margin-top:6px">Free option: paste a Google Drive share link (file shared as “Anyone with the link”) or any direct https link. Free hosts: archive.org (audio), a GitHub repo via cdn.jsdelivr.net (images), YouTube/Vimeo (video).</p></div>
+            <div class="admin-form-group"><label for="audioChapters">Chapters <span style="opacity:.6">(optional)</span></label><textarea id="audioChapters" rows="3" placeholder="00:00 Welcome&#10;05:30 The main text&#10;32:10 Altar call"></textarea><p class="admin-hint" style="font-size:.78rem;color:var(--white-60);margin-top:6px">One per line: time, then title. Visitors can tap a chapter to jump there.</p></div>
+            <div class="admin-form-group"><label for="audioTranscript">Transcript <span style="opacity:.6">(optional)</span></label><textarea id="audioTranscript" rows="5" placeholder="[00:05] Good morning church…&#10;[00:20] Open your Bibles to…"></textarea><p class="admin-hint" style="font-size:.78rem;color:var(--white-60);margin-top:6px">Paste text. Start a line with [mm:ss] to make it clickable. Visitors can search it.</p></div>
+            <div class="progress-bar-wrap" id="audioProgressWrap">
+              <div class="progress-bar-track"><div class="progress-bar-fill" id="audioProgressFill"></div></div>
+              <div class="progress-bar-label" id="audioProgressLabel">Uploading...</div>
+            </div>
+            <button type="submit" class="admin-btn primary" id="uploadAudioBtn"><i class="fas fa-upload"></i> Upload Audio</button>
+          </form>
+        </div>
+        <div class="upload-card">
+          <div class="upload-card-title"><i class="fas fa-list"></i> All Audio Sermons</div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead><tr><th scope="col">Title</th><th scope="col">Preacher</th><th scope="col">Date</th><th scope="col">Player / Actions</th></tr></thead>
+              <tbody id="audioTableBody"><tr><td colspan="4" style="text-align:center;color:var(--white-60);padding:32px;">Loading audio sermons...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== GALLERY PANEL ===== -->
+      <div class="panel" id="panel-gallery">
+        <h2 class="panel-title">Gallery Management</h2>
+        <p class="panel-sub">Upload images and videos to the church gallery. Supports masonry layout on the public site.</p>
+        <div class="upload-card">
+          <div class="upload-card-title"><i class="fas fa-cloud-upload-alt"></i> Upload Media</div>
+          <form id="galleryUploadForm" data-on-submit="event.preventDefault(); handleGalleryUpload();">
+            <div class="form-grid">
+              <div class="admin-form-group"><label>Caption</label><input type="text" id="galleryCaption" placeholder="e.g. Sunday Service - January 2026"/></div>
+              <div class="admin-form-group"><label>Category</label>
+                <select id="galleryCategory">
+                  <option value="Sunday Service">Sunday Service</option>
+                  <option value="Events">Events</option><option value="Outreach">Outreach</option>
+                  <option value="Youth">Youth</option><option value="Children">Children</option>
+                  <option value="Fasting & Prayer">Fasting &amp; Prayer</option>
+                  <option value="General">General</option>
+                </select>
+              </div>
+            </div>
+            <div class="admin-form-group"><label>Image or Video File</label>
+              <div class="upload-zone" id="galleryDropZone">
+                <i class="fas fa-images"></i>
+                <p>Click or drag image/video here<br><span>JPG, PNG, MP4 — Max 50MB per file</span></p>
+              </div>
+              <input type="file" id="galleryFileInput" accept="image/*,video/*" style="display:none;"/>
+            </div>
+            <div class="admin-form-group"><label for="galleryUrlInput">…or paste a direct image/video link</label><input type="url" id="galleryUrlInput" placeholder="https://…/photo.jpg"/><p class="admin-hint" style="font-size:.78rem;color:var(--white-60);margin-top:6px">Free option, no storage plan needed: paste a direct https link instead. Free hosts: archive.org (audio), a GitHub repo via cdn.jsdelivr.net (images), YouTube/Vimeo (video).</p></div>
+            <div class="progress-bar-wrap" id="galleryProgressWrap">
+              <div class="progress-bar-track"><div class="progress-bar-fill" id="galleryProgressFill"></div></div>
+              <div class="progress-bar-label" id="galleryProgressLabel">Uploading...</div>
+            </div>
+            <button type="submit" class="admin-btn primary" id="uploadGalleryBtn"><i class="fas fa-upload"></i> Upload to Gallery</button>
+          </form>
+        </div>
+        <div class="upload-card">
+          <div class="upload-card-title" style="display:flex;justify-content:space-between;align-items:center;">
+            <span><i class="fas fa-th"></i> Gallery Items</span>
+            <select id="galleryCategoryFilter" data-on-change="filterGallery(this.value)" style="padding:8px 14px;background:var(--dark-bg);border:1px solid var(--dark-border);border-radius:8px;color:var(--white);font-size:0.85rem;">
+              <option value="">All Categories</option>
+              <option>Sunday Service</option><option>Events</option><option>Outreach</option>
+              <option>Youth</option><option>Children</option><option>Fasting & Prayer</option><option>General</option>
+            </select>
+          </div>
+          <div class="media-grid" id="adminGalleryGrid">
+            <div style="color:var(--white-60);text-align:center;grid-column:1/-1;padding:40px;">Loading gallery...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== BELIEVERS BIBLE COLLEGE PANEL ===== -->
+      <div class="panel" id="panel-bbc">
+        <h2 class="panel-title">Believers Bible College</h2>
+        <p class="panel-sub">Controls the promo on the homepage and the Devotional page. Leave a field empty to use the default. <a href="index.html#bbc" target="_blank" rel="noopener" style="color:var(--gold)">View on site</a></p>
+        <div class="upload-card">
+          <div class="upload-card-title"><i class="fas fa-graduation-cap"></i> Promo content</div>
+          <form id="bbcForm" novalidate>
+            <div class="admin-form-group"><label for="bbcHeadline">Headline</label><input type="text" id="bbcHeadline" maxlength="120"/></div>
+            <div class="admin-form-group"><label for="bbcText">Encouraging note <span id="bbcCount" style="color:var(--white-60)"></span></label><textarea id="bbcText" rows="4" maxlength="600"></textarea></div>
+            <div class="form-grid">
+              <div class="admin-form-group"><label for="bbcButton">Button text</label><input type="text" id="bbcButton" maxlength="60"/></div>
+              <div class="admin-form-group"><label for="bbcUrl">Believers Bible College link (https://…)</label><input type="url" id="bbcUrl" placeholder="https://"/></div>
+            </div>
+            <div class="admin-form-group"><label>Picture</label>
+              <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start">
+                <img id="bbcPreview" src="bbc-crest.webp" alt="Current Believers Bible College picture" style="width:260px;max-width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:12px;border:1px solid var(--dark-border);background:var(--dark-card)"/>
+                <div style="flex:1;min-width:240px">
+                  <input type="file" id="bbcFile" accept="image/jpeg,image/png,image/webp,image/gif" style="display:none"/>
+                  <button type="button" class="admin-btn secondary" id="bbcChoose"><i class="fas fa-image"></i> Choose picture</button>
+                  <button type="button" class="admin-btn secondary" id="bbcClearImg">Use default picture</button>
+                  <p style="font-size:.78rem;color:var(--white-60);margin:10px 0 8px">JPG, PNG or WebP, best as a 3:2 landscape picture. It is resized automatically so the page stays fast. No storage plan needed.</p>
+                  <label for="bbcImgUrl" style="font-size:.8rem">…or paste an image link</label>
+                  <input type="url" id="bbcImgUrl" placeholder="https://…/picture.jpg"/>
+                </div>
+              </div>
+              <div id="bbcImgMsg" role="status" aria-live="polite" style="margin-top:8px;font-size:.82rem;color:var(--white-60)"></div>
+            </div>
+            <button type="submit" class="admin-btn primary"><i class="fas fa-save"></i> Save</button>
+            <button type="button" class="admin-btn danger" id="bbcReset">Reset everything to defaults</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- ===== DEVOTIONALS PANEL ===== -->
+      <div class="panel" id="panel-devotionals">
+        <h2 class="panel-title">Daily Devotionals</h2>
+        <p class="panel-sub">One devotional per date. Drafts are never public. Scheduled devotionals go live on their date (Lagos time).</p>
+        <div class="upload-card">
+          <div class="upload-card-title"><i class="fas fa-pen"></i> <span id="devFormTitle">New Devotional</span></div>
+          <form id="devForm" novalidate>
+            <div class="form-grid">
+              <div class="admin-form-group"><label for="devDate">Date *</label><input type="date" id="devDate" required/></div>
+              <div class="admin-form-group"><label for="devTitle">Title *</label><input type="text" id="devTitle" maxlength="140" required/></div>
+              <div class="admin-form-group"><label for="devTheme">Theme / topic</label><input type="text" id="devTheme" maxlength="60" placeholder="e.g. Faith, Prayer, Hope"/></div>
+              <div class="admin-form-group"><label for="devScripture">Key scripture reference *</label><input type="text" id="devScripture" maxlength="80" placeholder="e.g. Psalm 23:1-3" required/></div>
+              <div class="admin-form-group"><label for="devAuthor">Author / attribution *</label><input type="text" id="devAuthor" maxlength="80" placeholder="Approved author name" required/></div>
+              <div class="admin-form-group"><label for="devStatus">Status</label>
+                <select id="devStatus"><option value="draft">Draft</option><option value="scheduled">Scheduled</option><option value="published">Published</option><option value="archived">Archived</option></select></div>
+            </div>
+            <div class="admin-form-group"><label for="devScriptureText">Scripture text (enter from a Bible version you are licensed to quote; include version, e.g. KJV)</label><textarea id="devScriptureText" rows="2"></textarea></div>
+            <div class="admin-form-group"><label for="devMessage">Main message * (blank line = new paragraph)</label><textarea id="devMessage" rows="9" required></textarea></div>
+            <div class="admin-form-group"><label for="devSupporting">Supporting passages (comma separated)</label><input type="text" id="devSupporting" placeholder="John 15:5, Romans 8:28"/></div>
+            <div class="admin-form-group"><label for="devApplication">Practical lessons / daily application</label><textarea id="devApplication" rows="3"></textarea></div>
+            <div class="form-grid">
+              <div class="admin-form-group"><label for="devReflection">Reflection questions (one per line)</label><textarea id="devReflection" rows="3"></textarea></div>
+              <div class="admin-form-group"><label for="devPoints">Prayer points (one per line)</label><textarea id="devPoints" rows="3"></textarea></div>
+            </div>
+            <div class="admin-form-group"><label for="devPrayer">Closing prayer</label><textarea id="devPrayer" rows="2"></textarea></div>
+            <div class="form-grid">
+              <div class="admin-form-group"><label for="devDeclaration">Declaration (optional)</label><input type="text" id="devDeclaration"/></div>
+              <div class="admin-form-group"><label for="devMemory">Memory verse (optional)</label><input type="text" id="devMemory"/></div>
+              <div class="admin-form-group"><label for="devImage">Featured image URL (optional, https)</label><input type="url" id="devImage" placeholder="https://"/></div>
+              <div class="admin-form-group"><label for="devPdf">PDF URL (optional, https)</label><input type="url" id="devPdf" placeholder="https://"/></div>
+            </div>
+            <button type="submit" class="admin-btn primary"><i class="fas fa-save"></i> Save Devotional</button>
+            <button type="button" class="admin-btn secondary" data-on-click="resetDevForm()">Clear</button>
+          </form>
+        </div>
+        <div class="upload-card">
+          <div class="upload-card-title"><i class="fas fa-list"></i> All Devotionals</div>
+          <div class="admin-table-wrap"><table class="admin-table">
+            <thead><tr><th scope="col">Date</th><th scope="col">Title</th><th scope="col">Scripture</th><th scope="col">Status</th><th scope="col">Actions</th></tr></thead>
+            <tbody id="devTableBody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- ===== TESTIMONIES PANEL ===== -->
+      <div class="panel" id="panel-testimonies">
+        <h2 class="panel-title">Testimonies</h2>
+        <p class="panel-sub">Only testimonies you approve appear publicly. Every submission includes the person's publication consent.</p>
+        <div class="upload-card"><div class="admin-table-wrap"><table class="admin-table">
+          <thead><tr><th scope="col">From</th><th scope="col">Testimony</th><th scope="col">Status</th><th scope="col">Actions</th></tr></thead>
+          <tbody id="testimonyTableBody"></tbody></table></div></div>
+      </div>
+
+      <!-- ===== VISITORS PANEL ===== -->
+      <div class="panel" id="panel-visitors">
+        <h2 class="panel-title">Visitor Registrations</h2>
+        <p class="panel-sub">People who registered a visit or sent an enquiry.</p>
+        <div class="upload-card"><div class="admin-table-wrap"><table class="admin-table">
+          <thead><tr><th scope="col">Name</th><th scope="col">Contact</th><th scope="col">Planned visit</th><th scope="col">Message</th></tr></thead>
+          <tbody id="visitorTableBody"></tbody></table></div></div>
+      </div>
+
+      <!-- ===== GIVING PANEL ===== -->
+      <div class="panel" id="panel-giving">
+        <h2 class="panel-title">Online giving</h2>
+        <p class="panel-sub">Gifts made through Paystack and verified with Paystack before they are counted. Visible to super admins only. Card details are never stored here.</p>
+        <div class="upload-card">
+          <p id="giveStats" style="color:var(--gold);font-weight:600" role="status"></p><p id="giveNote" style="color:var(--white-60)" role="status"></p>
+          <button type="button" class="admin-btn" id="giveRecheck">Re-check pending payments</button>
+          <div style="overflow-x:auto;margin-top:16px"><table class="admin-table"><thead><tr><th scope="col">Date</th><th scope="col">Name</th><th scope="col">Purpose</th><th scope="col">Amount</th><th scope="col">Status</th></tr></thead><tbody id="giveBody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- ===== RSVP + CHECK-IN PANEL ===== -->
+      <div class="panel" id="panel-rsvp">
+        <h2 class="panel-title">RSVPs &amp; check-in</h2>
+        <p class="panel-sub">Reservations for events that accept RSVPs. Ushers can scan each guest's QR ticket with a phone camera, or type the 12-character code.</p>
+        <div class="upload-card">
+          <div class="admin-form-group"><label for="rsvpEvent">Event</label><select id="rsvpEvent"><option value="">Loading…</option></select></div>
+          <p id="rsvpStats" style="color:var(--gold);font-weight:600" role="status"></p>
+        </div>
+        <div class="upload-card" style="margin-top:20px"><h3 style="margin-bottom:12px">Door check-in</h3>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px"><button type="button" class="admin-btn primary" id="scanStart"><i class="fas fa-camera"></i> Start camera scanner</button><button type="button" class="admin-btn danger" id="scanStop" hidden>Stop camera</button></div>
+          <video id="scanVideo" playsinline muted hidden style="width:100%;max-width:420px;border-radius:12px;background:#000;margin-bottom:12px"></video>
+          <div class="admin-form-group"><label for="scanCode">Or type the ticket code</label><div style="display:flex;gap:10px"><input id="scanCode" type="text" maxlength="24" autocomplete="off" autocapitalize="characters" placeholder="ABCD EFGH JKMN" style="flex:1"/><button type="button" class="admin-btn" id="scanGo">Check in</button></div></div>
+          <div id="scanResult" class="scan-result" role="status" aria-live="assertive">Ready.</div>
+        </div>
+        <div class="upload-card" style="margin-top:20px;overflow-x:auto"><table class="admin-table"><thead><tr><th scope="col">Name</th><th scope="col">Places</th><th scope="col">Status</th><th scope="col">Contact</th><th scope="col"></th></tr></thead><tbody id="rsvpBody"></tbody></table></div>
+      </div>
+
+      <!-- ===== LIVE SERVICE PANEL ===== -->
+      <div class="panel" id="panel-live">
+        <h2 class="panel-title">Live service <span id="liveState" class="live-chip" role="status">Offline</span></h2>
+        <p class="panel-sub">Switch this on when the service starts. Visitors see a “Live now” button on every page and follow your notes and scriptures in real time. Switch it off when you finish.</p>
+        <div class="upload-card">
+          <div class="admin-form-group"><label for="liveTitle">Service title</label><input id="liveTitle" type="text" maxlength="120" placeholder="Sunday Service"/></div>
+          <div class="admin-form-group"><label for="liveVideo">YouTube live link <span style="opacity:.6">(optional)</span></label><input id="liveVideo" type="url" maxlength="200" placeholder="https://www.youtube.com/watch?v=…"/></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><button type="button" class="admin-btn primary" id="liveGo">Go live</button><button type="button" class="admin-btn danger" id="liveEnd" disabled>End service</button>
+            <label style="font-size:.85rem;color:var(--white-60)"><input type="checkbox" id="liveClear" checked> clear notes when ending</label></div>
+        </div>
+        <div class="upload-card" style="margin-top:20px"><h3 style="margin-bottom:12px">Notes &amp; scriptures</h3>
+          <div class="admin-form-group"><label for="liveText">Type a point or a reference (e.g. Romans 8:28)</label><input id="liveText" type="text" maxlength="600" placeholder="Press Enter to post a note"/></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px"><button type="button" class="admin-btn primary" id="liveAddNote">Post note</button><button type="button" class="admin-btn" id="liveAddScripture">Post as scripture</button></div>
+          <ul id="liveList" style="list-style:none;margin:0;padding:0;max-height:320px;overflow:auto"></ul>
+        </div>
+      </div>
+
+      <!-- ===== BACKUP PANEL ===== -->
+      <div class="panel" id="panel-backup">
+        <h2 class="panel-title">Backup &amp; Export</h2>
+        <p class="panel-sub">Download a copy of your data at any time (free, runs in your browser). Do this weekly and keep the file somewhere safe. It may contain private information such as prayer requests, so never email it or share it publicly.</p>
+        <div class="upload-card">
+          <div class="upload-card-title"><i class="fas fa-database"></i> Choose what to include</div>
+          <div id="backupList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:18px"></div>
+          <button type="button" class="admin-btn primary" id="backupBtn"><i class="fas fa-file-arrow-down"></i> Download backup (.json)</button>
+          <button type="button" class="admin-btn secondary" id="emailsBtn"><i class="fas fa-envelope"></i> Newsletter emails (.csv)</button>
+          <div id="backupMsg" role="status" aria-live="polite" style="margin-top:14px;font-size:.88rem;color:var(--white-60)"></div>
+        </div>
+      </div>
+
+      <!-- ===== ACTIVITY LOG PANEL ===== -->
+      <div class="panel" id="panel-activity">
+        <h2 class="panel-title">Activity Log</h2>
+        <p class="panel-sub">The 200 most recent admin actions (who changed what, and when). Visible to Super Admins only; entries can't be edited or deleted.</p>
+        <div class="upload-card"><div class="admin-table-wrap"><table class="admin-table">
+          <thead><tr><th scope="col">When (Lagos)</th><th scope="col">Admin</th><th scope="col">Action</th><th scope="col">Item</th></tr></thead>
+          <tbody id="activityBody"></tbody></table></div></div>
+      </div>
+
+      <!-- ===== EVENTS PANEL ===== -->
+      <div class="panel" id="panel-events">
+        <h2 class="panel-title">Events Management</h2>
+        <p class="panel-sub">Create and manage church programs and events.</p>
+        <div class="upload-card">
+          <div class="upload-card-title"><i class="fas fa-calendar-plus"></i> Add New Event</div>
+          <form id="eventForm" data-on-submit="event.preventDefault(); handleEventSave();">
+            <div class="form-grid">
+              <div class="admin-form-group"><label>Event Title *</label><input type="text" id="eventTitle" placeholder="e.g. Ruth & Boaz Couples Meeting" required/></div>
+              <div class="admin-form-group"><label>Event Type</label>
+                <select id="eventType">
+                  <option>Sunday Service</option><option>Midweek Service</option>
+                  <option>Ruth & Boaz</option><option>Fasting & Prayer</option>
+                  <option>Outreach</option><option>Youth Program</option><option>Special Event</option>
+                </select>
+              </div>
+              <div class="admin-form-group"><label>Date *</label><input type="date" id="eventDate" required/></div>
+              <div class="admin-form-group"><label>Start time (Lagos)</label><input type="time" id="eventTime"/></div>
+              <div class="admin-form-group"><label>End time (optional)</label><input type="time" id="eventEndTime"/></div>
+              <div class="admin-form-group"><label>End date (multi-day, optional)</label><input type="date" id="eventEndDate"/></div>
+              <div class="admin-form-group"><label>Venue</label><input type="text" id="eventVenue" placeholder="Church Auditorium / Online"/></div>
+              <div class="admin-form-group"><label>Status</label>
+                <select id="eventStatus"><option value="upcoming">Upcoming</option><option value="ongoing">Ongoing</option><option value="completed">Completed</option></select>
+              </div>
+            </div>
+            <div class="form-grid"><div class="admin-form-group"><label for="eventRsvp">Accept RSVPs?</label><select id="eventRsvp"><option value="">No</option><option value="1">Yes: visitors reserve places and get a QR ticket</option></select></div>
+              <div class="admin-form-group"><label for="eventCapacity">Capacity (places; 0 = no limit)</label><input id="eventCapacity" type="number" min="0" max="5000" value="0"/></div>
+              <div class="admin-form-group"><label for="eventWaitlist">When full</label><select id="eventWaitlist"><option value="1">Offer a waiting list</option><option value="0">Say the event is full</option></select></div></div>
+            <div class="admin-form-group"><label>Description</label><textarea id="eventDesc" rows="3" placeholder="Event description..."></textarea></div>
+            <button type="submit" class="admin-btn primary"><i class="fas fa-save"></i> Save Event</button>
+          </form>
+        </div>
+        <div class="upload-card">
+          <div class="upload-card-title"><i class="fas fa-list"></i> All Events</div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead><tr><th scope="col">Event</th><th scope="col">Type</th><th scope="col">Date</th><th scope="col">Venue</th><th scope="col">Status</th><th scope="col">Actions</th></tr></thead>
+              <tbody id="eventTableBody"><tr><td colspan="6" style="text-align:center;color:var(--white-60);padding:32px;">Loading events...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PRAYER REQUESTS PANEL ===== -->
+      <div class="panel" id="panel-prayers">
+        <h2 class="panel-title">Prayer Requests</h2>
+        <p class="panel-sub">View and manage all submitted prayer requests, testimonies and counselling requests.</p>
+        <div class="upload-card" style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px;">
+          <div style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:8px;padding:16px 24px;flex:1;min-width:160px;">
+            <div style="font-size:0.75rem;color:#93c5fd;letter-spacing:1px;margin-bottom:6px;">PRAYER</div>
+            <div style="font-size:1.8rem;font-family:var(--font-display);color:var(--white);" id="countPrayer">—</div>
+          </div>
+          <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:8px;padding:16px 24px;flex:1;min-width:160px;">
+            <div style="font-size:0.75rem;color:#34d399;letter-spacing:1px;margin-bottom:6px;">TESTIMONY</div>
+            <div style="font-size:1.8rem;font-family:var(--font-display);color:var(--white);" id="countTestimony">—</div>
+          </div>
+          <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:16px 24px;flex:1;min-width:160px;">
+            <div style="font-size:0.75rem;color:#fbbf24;letter-spacing:1px;margin-bottom:6px;">COUNSELLING</div>
+            <div style="font-size:1.8rem;font-family:var(--font-display);color:var(--white);" id="countCounselling">—</div>
+          </div>
+        </div>
+        <div class="upload-card">
+          <div class="upload-card-title" style="display:flex;justify-content:space-between;align-items:center;">
+            <span><i class="fas fa-hands-praying"></i> All Requests</span>
+            <select id="prayerTypeFilter" data-on-change="filterPrayers(this.value)" style="padding:8px 14px;background:var(--dark-bg);border:1px solid var(--dark-border);border-radius:8px;color:var(--white);font-size:0.85rem;">
+              <option value="">All Types</option><option value="prayer">Prayer</option>
+              <option value="testimony">Testimony</option><option value="counselling">Counselling</option>
+            </select>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead><tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col">Request</th><th scope="col">Phone</th><th scope="col">Actions</th></tr></thead>
+              <tbody id="prayerTableBody"><tr><td colspan="5" style="text-align:center;color:var(--white-60);padding:32px;">Loading requests...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== LIVESTREAM PANEL ===== -->
+      <div class="panel" id="panel-livestream">
+        <h2 class="panel-title">Livestream Management</h2>
+        <p class="panel-sub">Update the YouTube channel ID or specific video ID for the homepage livestream embed.</p>
+        <div class="upload-card">
+          <div class="upload-card-title"><i class="fab fa-youtube"></i> YouTube Live Settings</div>
+          <div class="admin-form-group"><label>YouTube Channel ID</label><input type="text" id="ytChannelId" placeholder="UCxxxxxxxxxxxxxx" value="UCxxxxxxxxxxxxxx"/></div>
+          <div class="admin-form-group"><label>Or Specific Video ID (for archived stream)</label><input type="text" id="ytVideoId" placeholder="dQw4w9WgXcQ"/></div>
+          <div class="admin-form-group"><label>Live Status</label>
+            <select id="liveStatus"><option value="live">Currently Live</option><option value="upcoming">Upcoming</option><option value="offline">Offline</option></select>
+          </div>
+          <div class="admin-form-group"><label>Next Service Announcement</label><input type="text" id="liveAnnouncement" placeholder="e.g. Join us Sunday at 8:00 AM for our Thanksgiving Service"/></div>
+          <button class="admin-btn primary" data-on-click="saveLivestreamSettings()"><i class="fas fa-save"></i> Save Livestream Settings</button>
+        </div>
+        <div class="upload-card">
+          <div class="upload-card-title"><i class="fas fa-archive"></i> Previous Broadcasts</div>
+          <div class="admin-form-group"><label>Add Archive Link</label>
+            <div style="display:flex;gap:12px;">
+              <input type="text" id="archiveTitle" placeholder="Broadcast title" style="flex:1;padding:12px 16px;background:rgba(255,255,255,0.05);border:1px solid var(--dark-border);border-radius:8px;color:var(--white);font-size:0.9rem;"/>
+              <input type="url" id="archiveUrl" placeholder="YouTube URL" style="flex:2;padding:12px 16px;background:rgba(255,255,255,0.05);border:1px solid var(--dark-border);border-radius:8px;color:var(--white);font-size:0.9rem;"/>
+              <button class="admin-btn primary" data-on-click="addArchive()" style="white-space:nowrap;"><i class="fas fa-plus"></i> Add</button>
+            </div>
+          </div>
+          <div id="archiveList" style="margin-top:16px;display:flex;flex-direction:column;gap:10px;"></div>
+        </div>
+      </div>
+
+      <!-- ===== SETTINGS PANEL ===== -->
+      <div class="panel" id="panel-settings">
+        <h2 class="panel-title">Settings</h2>
+        <p class="panel-sub">Manage church information, WhatsApp number, Firebase config and site preferences.</p>
+        <div class="upload-card">
+          <div class="upload-card-title"><i class="fas fa-church"></i> Church Information</div>
+          <div class="form-grid">
+            <div class="admin-form-group"><label>Church Name</label><input type="text" value="CAC Good Works Assembly"/></div>
+            <div class="admin-form-group"><label>WhatsApp Number</label><input type="text" id="waNumber" placeholder="+2348000000000" value="+2348000000000"/></div>
+            <div class="admin-form-group"><label>Email Address</label><input type="email" value="info@cacgoodworks.org"/></div>
+            <div class="admin-form-group"><label>Phone Number</label><input type="tel" placeholder="+234 XXX XXXX XXX"/></div>
+          </div>
+          <div class="admin-form-group"><label>Church Address</label><textarea rows="2" placeholder="Full address..."></textarea></div>
+          <button class="admin-btn primary"><i class="fas fa-save"></i> Save Church Info</button>
+        </div>
+        <div class="upload-card">
+          <div class="upload-card-title"><i class="fas fa-fire"></i> Firebase Configuration</div>
+          <p style="color:var(--white-60);font-size:0.875rem;margin-bottom:16px;">Update your Firebase project credentials. Edit <code style="color:var(--gold)">firebase.js</code> directly with your project config values.</p>
+          <div class="form-grid">
+            <div class="admin-form-group"><label>API Key</label><input type="text" placeholder="AIza..."/></div>
+            <div class="admin-form-group"><label>Auth Domain</label><input type="text" placeholder="project.firebaseapp.com"/></div>
+            <div class="admin-form-group"><label>Project ID</label><input type="text" placeholder="your-project-id"/></div>
+            <div class="admin-form-group"><label>Storage Bucket</label><input type="text" placeholder="project.appspot.com"/></div>
+          </div>
+          <div style="background:rgba(201,169,110,0.08);border:1px solid rgba(201,169,110,0.2);border-radius:8px;padding:16px;margin-top:8px;">
+            <p style="font-size:0.85rem;color:var(--gold);"><i class="fas fa-info-circle"></i> &nbsp;To activate Firebase: open <strong>firebase.js</strong> and replace the <code>firebaseConfig</code> values with your Firebase project credentials from the Firebase Console.</p>
+          </div>
+        </div>
+        <div class="upload-card">
+          <div class="upload-card-title"><i class="fas fa-shield-alt"></i> Security</div>
+          <div class="form-grid">
+            <div class="admin-form-group"><label>Current Passcode</label><input type="password" placeholder="Current passcode"/></div>
+            <div class="admin-form-group"><label>New Passcode</label><input type="password" placeholder="New passcode"/></div>
+          </div>
+          <button class="admin-btn secondary"><i class="fas fa-key"></i> Change Passcode</button>
+        </div>
+      </div>
+
+    </div><!-- /admin-content -->
+  </main>
+</div>
+
+<!-- Admin Toast -->
+<div class="admin-toast" id="adminToast"><i class="fas fa-check-circle"></i> <span>Action completed.</span></div>
+
+<!-- Floating WhatsApp -->
+<a href="https://wa.me/2348079731695?text=Hello%20CAC%20Good%20Works%20Assembly,%20I%20would%20like%20to%20make%20an%20enquiry." target="_blank" class="floating-whatsapp" style="opacity:1;" aria-label="WhatsApp">
+  <i class="fab fa-whatsapp"></i><span class="wa-tooltip">Chat with us</span><div class="wa-ripple"></div>
+</a>
+
+<script defer src="config.js"></script>
+<script src="calendar-lib.js"></script>
+<script type="module" src="firebase.js"></script>
+<script defer src="media.js"></script>
+<script defer src="drive.js"></script>
+<script defer src="edge.js"></script>
+<script defer src="admin-live.js"></script>
+<script defer src="admin-rsvp.js"></script>
+<script defer src="admin-give.js"></script>
+<script src="upload.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

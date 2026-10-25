@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Sermons — CAC Good Works Assembly</title>
+  <link rel="preload" href="font-jost-latin.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="font-cinzel-latin.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="font-cormorant-latin.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="icons-solid.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="icons-regular.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="icons-brands.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="stylesheet" href="fonts.css"/>
+  <link rel="stylesheet" href="icons.css"/>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page-hero{padding:160px 0 80px;text-align:center;background:linear-gradient(135deg,#0a0a0f 0%,#1a1025 50%,#0d1520 100%);border-bottom:1px solid var(--dark-border);}
+    .page-hero h1{font-size:clamp(2.5rem,6vw,4rem);margin-bottom:16px;}
+    .page-hero p{color:var(--white-60);font-size:1.05rem;}
+    .sermons-page{padding:80px 0;background:var(--dark-bg);}
+    .sermons-filters{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px;align-items:center;}
+    .sermons-filters input{flex:1;min-width:200px;padding:12px 18px;background:var(--dark-card);border:1px solid var(--dark-border);border-radius:50px;color:var(--white);font-size:0.9rem;transition:var(--transition);}
+    .sermons-filters input:focus{outline:none;border-color:var(--gold);}
+    .filter-btn{padding:10px 20px;border-radius:50px;background:var(--dark-card);border:1px solid var(--dark-border);color:var(--white-60);font-size:0.85rem;cursor:pointer;transition:var(--transition);}
+    .filter-btn.active,.filter-btn:hover{background:var(--gold);border-color:var(--gold);color:var(--dark-bg);}
+    .sermons-tabs{display:flex;gap:4px;border-bottom:1px solid var(--dark-border);margin-bottom:40px;}
+    .tab-btn{padding:14px 28px;background:none;border:none;color:var(--white-60);font-size:0.9rem;cursor:pointer;transition:var(--transition);border-bottom:2px solid transparent;font-family:var(--font-body);}
+    .tab-btn.active,.tab-btn:hover{color:var(--gold);border-bottom-color:var(--gold);}
+    .tab-pane{display:none;}.tab-pane.active{display:block;}
+    .sermon-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:28px;}
+    .sermon-card{background:var(--dark-card);border:1px solid var(--dark-border);border-radius:var(--radius-lg);overflow:hidden;transition:var(--transition);cursor:pointer;}
+    .sermon-card:hover{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 16px 40px rgba(201,169,110,0.1);}
+    .sermon-thumb{aspect-ratio:16/9;background:linear-gradient(135deg,var(--dark-surface),rgba(201,169,110,0.08));display:flex;align-items:center;justify-content:center;font-size:3rem;color:var(--gold);opacity:0.4;position:relative;}
+    .sermon-thumb .play-btn{position:absolute;width:56px;height:56px;border-radius:50%;background:rgba(201,169,110,0.9);display:flex;align-items:center;justify-content:center;color:var(--dark-bg);font-size:1.2rem;opacity:0;transition:var(--transition);}
+    .sermon-card:hover .play-btn{opacity:1;}
+    .sermon-info{padding:20px;}
+    .sermon-info .s-category{font-size:0.7rem;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;display:block;}
+    .sermon-info h3{font-size:1.05rem;color:var(--white);margin-bottom:8px;line-height:1.4;}
+    .sermon-meta{display:flex;justify-content:space-between;align-items:center;margin-top:12px;}
+    .sermon-meta span{font-size:0.8rem;color:var(--white-60);}
+    .audio-sermon-card{background:var(--dark-card);border:1px solid var(--dark-border);border-radius:var(--radius);padding:20px 24px;display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;transition:var(--transition);}
+    .audio-sermon-card:hover{border-color:var(--gold);}
+    .audio-icon-wrap{width:52px;height:52px;border-radius:14px;background:rgba(201,169,110,0.1);display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--gold);}
+    .audio-info h4{font-size:0.95rem;color:var(--white);margin-bottom:4px;}
+    .audio-info span{font-size:0.8rem;color:var(--white-60);}
+    .audio-actions{display:flex;gap:10px;}
+    .audio-actions button,.audio-actions a{width:36px;height:36px;border-radius:50%;background:var(--dark-surface);border:1px solid var(--dark-border);color:var(--white-60);display:flex;align-items:center;justify-content:center;font-size:0.8rem;transition:var(--transition);cursor:pointer;}
+    .audio-actions button:hover,.audio-actions a:hover{background:var(--gold);border-color:var(--gold);color:var(--dark-bg);}
+    .audio-player-wrap{margin-top:12px;grid-column:1/-1;display:none;}
+    .audio-sermon-card.playing .audio-player-wrap{display:block;}
+    .audio-player-wrap audio{width:100%;height:36px;}
+    /* Video Modal */
+    .video-modal{position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:9000;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+    .video-modal.open{opacity:1;pointer-events:all;}
+    .video-modal-inner{width:100%;max-width:900px;position:relative;}
+    .modal-close{position:absolute;top:-44px;right:0;width:36px;height:36px;border-radius:50%;background:var(--dark-card);border:1px solid var(--dark-border);color:var(--white);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+    .modal-video-wrap{position:relative;padding-bottom:56.25%;height:0;}
+    .modal-video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;}
+    .no-results{text-align:center;padding:60px 24px;color:var(--white-60);}
+    .sermon-card{display:block;width:100%;padding:0;font:inherit;color:inherit;text-align:left}
+    .sermon-card:disabled{opacity:.5;cursor:not-allowed}
+    .sermon-card:focus-visible,.filter-btn:focus-visible,.tab-btn:focus-visible,.audio-actions button:focus-visible,.audio-actions a:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+    .sermon-thumb{position:relative;overflow:hidden}.sermon-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .sermon-thumb .play-btn{z-index:1}
+    .filter-row{display:flex;gap:12px;flex-wrap:wrap}
+    .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+    .audio-sermon-card .audio-player-wrap{margin-top:12px}
+    .ap-tools{display:flex;gap:16px;align-items:center;margin:10px 0;color:var(--white-60);font-size:.85rem}
+    .ap-speed{background:var(--dark-surface);color:var(--white);border:1px solid var(--dark-border);border-radius:8px;padding:4px 8px}
+    .ap-sect{margin-top:8px;border-top:1px solid var(--dark-border);padding-top:8px}.ap-sect summary{cursor:pointer;color:var(--gold);font-size:.9rem}
+    .ap-chapters{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:4px}
+    .ap-chapters button,.ap-transcript button{background:none;border:0;color:var(--white-60);cursor:pointer;font:inherit;text-align:left;padding:6px 8px;border-radius:8px}
+    .ap-chapters button:hover,.ap-transcript button:hover,.ap-chapters .now button{background:rgba(201,169,110,.12);color:var(--white)}
+    .ap-chapters b,.ap-transcript button{color:var(--gold);font-variant-numeric:tabular-nums}
+    .ap-search{width:100%;margin:10px 0 4px;padding:10px 14px;background:var(--dark-surface);border:1px solid var(--dark-border);border-radius:50px;color:var(--white)}
+    .ap-count{color:var(--white-60);font-size:.8rem;margin:2px 0}
+    .ap-transcript{max-height:280px;overflow:auto;padding-right:6px}.ap-transcript .ln{margin:0 0 8px;line-height:1.6;color:var(--white-80,#ddd)}
+    .ap-transcript mark{background:rgba(201,169,110,.35);color:inherit;border-radius:3px}
+    .ap-soon{display:block;margin-top:4px;font-style:italic}
+    .no-results i{font-size:3rem;color:var(--dark-border);margin-bottom:16px;display:block;}
+  </style>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#0a0a0f"/>
+  <link rel="icon" href="icon-64.png" type="image/png" sizes="64x64"/>
+  <link rel="apple-touch-icon" href="icon-180.png"/>
+<link rel="alternate" type="application/rss+xml" title="Messages podcast" href="podcast.xml"/>
+<script src="theme.js"></script>
+  <!-- seo:start -->
+  <link rel="canonical" href="https://example.org/sermons.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="CAC Good Works Assembly"/>
+  <meta property="og:url" content="https://example.org/sermons.html"/>
+  <meta property="og:title" content="Sermons — CAC Good Works Assembly"/>
+  <meta property="og:description" content="Sermons — CAC Good Works Assembly"/>
+  <meta property="og:image" content="https://example.org/og-image.png"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <!-- seo:end -->
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<nav class="navbar" id="navbar" aria-label="Main">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo"><img class="logo-emblem" src="logo-mark.webp" width="44" height="44" alt="" decoding="async"><div class="logo-text"><span class="logo-main">CAC Good Works</span><span class="logo-sub">Assembly</span></div></a>
+    <ul class="nav-links" id="navLinks"><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="ministries.html">Ministries</a></li><li><a href="devotionals.html">Devotional</a></li><li><a href="sermons.html" class="active">Sermons</a></li><li><a href="events.html">Events</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="give.html">Give</a></li><li><a href="contact.html">Contact</a></li><li><a href="admin-login.html" class="nav-admin">Admin</a></li></ul>
+    <button type="button" class="hamburger" id="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div id="main" class="page-hero">
+  <div class="container">
+    <span class="section-tag">God's Word</span>
+    <h1 class="animate-fade-up">Sermons &amp; Messages</h1>
+    <p class="animate-fade-up delay-1">Watch, listen and download anointed messages from CAC Good Works Assembly.</p>
+  </div>
+</div>
+
+<section class="sermons-page">
+  <div class="container">
+    <!-- Tabs -->
+    <div class="sermons-tabs" role="tablist" aria-label="Sermon type">
+      <button type="button" class="tab-btn active" role="tab" data-tab="video" aria-selected="true"><i class="fas fa-video" aria-hidden="true"></i> Video Sermons</button>
+      <button type="button" class="tab-btn" role="tab" data-tab="audio" aria-selected="false"><i class="fas fa-headphones" aria-hidden="true"></i> Audio Sermons</button>
+    </div>
+
+    <!-- VIDEO TAB -->
+    <div class="tab-pane active" id="tab-video">
+      <div class="sermons-filters">
+        <label class="sr-only" for="videoSearch">Search sermons</label><input type="search" id="videoSearch" placeholder="Search sermons by title or preacher..." autocomplete="off"/>
+        <div id="videoFilters" class="filter-row" role="group" aria-label="Filter by category" hidden></div>
+      </div>
+      <div class="sermon-grid" id="videoSermonGrid">
+        <div class="no-results"><i class="fas fa-spinner fa-spin"></i><p>Loading sermons...</p></div>
+      </div>
+    </div>
+
+    <!-- AUDIO TAB -->
+    <div class="tab-pane" id="tab-audio">
+      <div class="sermons-filters">
+        <label class="sr-only" for="audioSearch">Search audio sermons</label><input type="search" id="audioSearch" placeholder="Search audio sermons and transcripts..." autocomplete="off"/>
+      </div>
+      <div id="audioSermonList" style="display:flex;flex-direction:column;gap:16px;">
+        <div class="no-results"><i class="fas fa-spinner fa-spin"></i><p>Loading audio sermons...</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Video Modal -->
+<div class="video-modal" id="videoModal" role="dialog" aria-modal="true" aria-label="Sermon video">
+  <div class="video-modal-inner">
+    <button type="button" class="modal-close" id="modalClose" aria-label="Close video"><i class="fas fa-times"></i></button>
+    <div class="modal-video-wrap">
+      <iframe id="modalIframe" src="about:blank" title="Sermon" style="border:0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="footer-logo"><img class="logo-emblem" src="logo-mark.webp" width="44" height="44" alt="" decoding="async"><div class="logo-text"><span class="logo-main">CAC Good Works</span><span class="logo-sub">Assembly</span></div></div>
+        <p>Seeking God's manifest presence, leading people towards Christ-like nature.</p></div>
+      <div class="footer-links"><h4>Explore</h4><ul><li><a href="devotionals.html">Daily Devotional</a></li><li><a href="bible.html">Bible</a></li><li><a href="live.html">Live Service</a></li><li><a href="prayer-wall.html">Prayer Wall</a></li><li><a href="events.html">Events &amp; Calendar</a></li><li><a href="sermons.html">Sermons</a></li><li><a href="testimonies.html">Testimonies</a></li><li><a href="impact.html">Our Impact</a></li></ul></div>
+      <div class="footer-links"><h4>Get Involved</h4><ul><li><a href="visit.html">Plan Your Visit</a></li><li><a href="index.html#prayer">Prayer Request</a></li><li><a href="give.html">Give</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+      <div class="footer-links"><h4>Service Times</h4><ul><li><i class="fas fa-circle-dot"></i> Sunday 8:15 AM</li><li><i class="fas fa-circle-dot"></i> Wednesday 5:00 PM</li><li><i class="fas fa-circle-dot"></i> Times in Lagos (WAT)</li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 CAC Good Works Assembly. All Rights Reserved. · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p></div>
+  </div>
+</footer>
+
+<button type="button" class="scroll-top" id="scrollTop" aria-label="Scroll to top"><i class="fas fa-chevron-up"></i></button>
+<a href="https://wa.me/2348079731695?text=Hello%20CAC%20Good%20Works%20Assembly,%20I%20would%20like%20to%20make%20an%20enquiry." target="_blank" class="floating-whatsapp" style="opacity:1;"><i class="fab fa-whatsapp"></i><span class="wa-tooltip">Chat with us on WhatsApp</span><div class="wa-ripple"></div></a>
+
+<script defer src="config.js"></script>
+<script defer src="calendar-lib.js"></script>
+<script defer src="edge.js"></script>
+<script defer src="monitor.js"></script>
+<script type="module" src="firebase.js"></script>
+<script defer src="app.js"></script>
+<script defer src="live.js"></script>
+<script defer src="media.js"></script>
+<script defer src="sermons.js"></script>
+<script defer src="translate.js"></script>
+<script defer src="sw-register.js"></script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>About — CAC Good Works Assembly</title>
+  <link rel="preload" href="font-jost-latin.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="font-cinzel-latin.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="font-cormorant-latin.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="icons-solid.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="icons-regular.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="icons-brands.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="stylesheet" href="fonts.css"/>
+  <link rel="stylesheet" href="icons.css"/>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page-hero{padding:160px 0 80px;text-align:center;background:linear-gradient(135deg,#0a0a0f 0%,#1a1025 50%,#0d1520 100%);border-bottom:1px solid var(--dark-border);}
+    .page-hero h1{font-size:clamp(2.5rem,6vw,4rem);margin-bottom:16px;}
+    .about-story{padding:100px 0;background:var(--dark-bg);}
+    .story-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-bottom:80px;}
+    .story-img{border-radius:var(--radius-lg);aspect-ratio:4/3;background:linear-gradient(135deg,var(--dark-card),rgba(201,169,110,0.08));display:flex;align-items:center;justify-content:center;font-size:6rem;color:var(--gold);opacity:0.3;}
+    .story-content .section-tag{margin-bottom:12px;}
+    .story-content h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:20px;}
+    .story-content p{color:var(--white-60);line-height:1.9;margin-bottom:16px;}
+    .belief-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:60px;}
+    .belief-card{background:var(--dark-card);border:1px solid var(--dark-border);border-radius:var(--radius);padding:32px 24px;text-align:center;transition:var(--transition);}
+    .belief-card:hover{border-color:var(--gold);transform:translateY(-4px);}
+    .belief-card i{font-size:2rem;color:var(--gold);margin-bottom:16px;display:block;}
+    .belief-card h4{font-family:var(--font-display);font-size:1.1rem;margin-bottom:10px;}
+    .belief-card p{font-size:0.875rem;color:var(--white-60);line-height:1.7;}
+    .faq-section{padding:100px 0;background:var(--dark-surface);}
+    .faq-list{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:16px;}
+    .faq-item{background:var(--dark-card);border:1px solid var(--dark-border);border-radius:var(--radius);}
+    .faq-q{width:100%;padding:20px 24px;background:none;border:none;text-align:left;color:var(--white);font-size:0.95rem;font-family:var(--font-body);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;transition:var(--transition);}
+    .faq-q:hover{color:var(--gold);}
+    .faq-q i{color:var(--gold);transition:transform 0.3s;flex-shrink:0;}
+    .faq-item.open .faq-q i{transform:rotate(180deg);}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height 0.4s ease;}
+    .faq-item.open .faq-a{max-height:300px;}
+    .faq-a-inner{padding:0 24px 20px;color:var(--white-60);font-size:0.9rem;line-height:1.8;}
+    @media(max-width:900px){.story-grid{grid-template-columns:1fr;gap:40px;}.belief-grid{grid-template-columns:1fr;}}
+  </style>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#0a0a0f"/>
+  <link rel="icon" href="icon-64.png" type="image/png" sizes="64x64"/>
+  <link rel="apple-touch-icon" href="icon-180.png"/>
+<script src="csp-events.js"></script>
+<script src="theme.js"></script>
+  <!-- seo:start -->
+  <link rel="canonical" href="https://example.org/about.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="CAC Good Works Assembly"/>
+  <meta property="og:url" content="https://example.org/about.html"/>
+  <meta property="og:title" content="About — CAC Good Works Assembly"/>
+  <meta property="og:description" content="About — CAC Good Works Assembly"/>
+  <meta property="og:image" content="https://example.org/og-image.png"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <!-- seo:end -->
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<nav class="navbar" id="navbar" aria-label="Main">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo"><img class="logo-emblem" src="logo-mark.webp" width="44" height="44" alt="" decoding="async"><div class="logo-text"><span class="logo-main">CAC Good Works</span><span class="logo-sub">Assembly</span></div></a>
+    <ul class="nav-links" id="navLinks"><li><a href="index.html">Home</a></li><li><a href="about.html" class="active">About</a></li><li><a href="ministries.html">Ministries</a></li><li><a href="devotionals.html">Devotional</a></li><li><a href="sermons.html">Sermons</a></li><li><a href="events.html">Events</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="give.html">Give</a></li><li><a href="contact.html">Contact</a></li><li><a href="admin-login.html" class="nav-admin">Admin</a></li></ul>
+    <button type="button" class="hamburger" id="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div id="main" class="page-hero">
+  <div class="container">
+    <span class="section-tag">Who We Are</span>
+    <h1 class="animate-fade-up">About CAC Good Works</h1>
+    <p class="animate-fade-up delay-1">Rooted in faith. Driven by purpose. Growing in God's presence.</p>
+  </div>
+</div>
+
+<section class="about-story">
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-img"><i class="fas fa-church"></i></div>
+      <div class="story-content">
+        <span class="section-tag">Our Story</span>
+        <h2>A Church Born in Prayer</h2>
+        <p>CAC Good Works Assembly is a vibrant, Spirit-filled congregation of the Christ Apostolic Church, founded on an unwavering conviction that God desires to manifest His glory in the midst of His people. Since our founding, we have been a community of believers passionately pursuing God's presence and transforming lives through the power of the gospel.</p>
+        <p>Under the anointed leadership of Pastor Akin Akinbajo and Dr. Mrs Busola Akinbajo, the assembly has grown into a dynamic community with ministries spanning family, youth, children and community outreach — all rooted in the Word of God and fuelled by fervent prayer.</p>
+        <p>Our mission remains unchanged: This is a church that calls people to seek God's manifest presence, perfecting the saints towards Christ like nature and creating a friendly atmosphere for people to worship, locate and achieve their God's giving destiny...
+
+Where we raise the Josephs, Daniels and Esthers of our time.</p>
+      </div>
+    </div>
+
+    <div class="section-header"><span class="section-tag">What We Believe</span><h2>Our Core Beliefs</h2></div>
+    <div class="belief-grid">
+      <div class="belief-card"><i class="fas fa-book-bible"></i><h4>The Holy Scriptures</h4><p>We believe the Bible is the inspired, infallible Word of God — our ultimate authority for faith, doctrine and daily life.</p></div>
+      <div class="belief-card"><i class="fas fa-cross"></i><h4>Salvation through Christ</h4><p>We believe Jesus Christ is the only Son of God who died for our sins and rose again. Salvation is by grace alone through faith alone in Christ alone.</p></div>
+      <div class="belief-card"><i class="fas fa-dove"></i><h4>The Holy Spirit</h4><p>We believe in the baptism of the Holy Spirit with the evidence of speaking in tongues, empowering believers for life and ministry.</p></div>
+      <div class="belief-card"><i class="fas fa-hands-praying"></i><h4>Prayer &amp; Fasting</h4><p>We believe in the transformative power of prayer and fasting as the foundation of every spiritual breakthrough and victory.</p></div>
+      <div class="belief-card"><i class="fas fa-users"></i><h4>The Church</h4><p>We believe the Church is the body of Christ — called to worship God, make disciples, love one another and serve the world.</p></div>
+      <div class="belief-card"><i class="fas fa-star-of-david"></i><h4>Second Coming</h4><p>We believe in the imminent, physical return of Jesus Christ to establish His eternal kingdom and reign over all creation.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="container">
+    <div class="section-header"><span class="section-tag">Frequently Asked</span><h2>Common Questions</h2></div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button type="button" class="faq-q" data-on-click="toggleFaq(this)">What time are your services? <i class="fas fa-chevron-down"></i></button>
+        <div class="faq-a"><div class="faq-a-inner">We hold Sunday services at 8:15 AM, and a midweek service every Wednesday at 5:00 PM. We also observe corporate fasting and prayer during the last three days of every month.</div></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" data-on-click="toggleFaq(this)">How do I become a member? <i class="fas fa-chevron-down"></i></button>
+        <div class="faq-a"><div class="faq-a-inner">We welcome everyone to worship with us. To become a formal member, simply attend our membership class held periodically. Contact us via WhatsApp or email to find out the next class date.</div></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" data-on-click="toggleFaq(this)">Do you have a children's programme during service? <i class="fas fa-chevron-down"></i></button>
+        <div class="faq-a"><div class="faq-a-inner">Yes! Our Children Church runs simultaneously with the main service. Children ages 2–12 are welcomed into a safe, engaging and Bible-based learning environment led by our trained children's workers.</div></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" data-on-click="toggleFaq(this)">Can I watch services online? <i class="fas fa-chevron-down"></i></button>
+        <div class="faq-a"><div class="faq-a-inner">Absolutely! We stream our Sunday services live on YouTube. Visit our Sermons page or our YouTube channel to watch live or catch up on previous messages.</div></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" data-on-click="toggleFaq(this)">How can I request prayer? <i class="fas fa-chevron-down"></i></button>
+        <div class="faq-a"><div class="faq-a-inner">You can submit a prayer request on our homepage, contact us via WhatsApp, or speak with any of our pastoral team. We take every request seriously and our intercessors pray diligently for all needs shared with us.</div></div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" data-on-click="toggleFaq(this)">How can I give or support the church? <i class="fas fa-chevron-down"></i></button>
+        <div class="faq-a"><div class="faq-a-inner">You can give through bank transfer to CAC Good Works Assembly, First Bank Nigeria (Account Number: 2001215262), or via our online giving section on the homepage. Every gift is gratefully received and wisely stewarded for the Kingdom.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="footer-logo"><img class="logo-emblem" src="logo-mark.webp" width="44" height="44" alt="" decoding="async"><div class="logo-text"><span class="logo-main">CAC Good Works</span><span class="logo-sub">Assembly</span></div></div>
+        <p>Seeking God's manifest presence, leading people towards Christ-like nature.</p></div>
+      <div class="footer-links"><h4>Explore</h4><ul><li><a href="devotionals.html">Daily Devotional</a></li><li><a href="bible.html">Bible</a></li><li><a href="live.html">Live Service</a></li><li><a href="prayer-wall.html">Prayer Wall</a></li><li><a href="events.html">Events &amp; Calendar</a></li><li><a href="sermons.html">Sermons</a></li><li><a href="testimonies.html">Testimonies</a></li><li><a href="impact.html">Our Impact</a></li></ul></div>
+      <div class="footer-links"><h4>Get Involved</h4><ul><li><a href="visit.html">Plan Your Visit</a></li><li><a href="index.html#prayer">Prayer Request</a></li><li><a href="give.html">Give</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+      <div class="footer-links"><h4>Service Times</h4><ul><li><i class="fas fa-circle-dot"></i> Sunday 8:15 AM</li><li><i class="fas fa-circle-dot"></i> Wednesday 5:00 PM</li><li><i class="fas fa-circle-dot"></i> Times in Lagos (WAT)</li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 CAC Good Works Assembly. All Rights Reserved. · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p></div>
+  </div>
+</footer>
+
+<button type="button" class="scroll-top" id="scrollTop" aria-label="Scroll to top"><i class="fas fa-chevron-up"></i></button>
+<a href="https://wa.me/2348079731695?text=Hello%20CAC%20Good%20Works%20Assembly,%20I%20would%20like%20to%20make%20an%20enquiry." target="_blank" class="floating-whatsapp" style="opacity:1;"><i class="fab fa-whatsapp"></i><span class="wa-tooltip">Chat with us on WhatsApp</span><div class="wa-ripple"></div></a>
+<script defer src="config.js"></script>
+<script defer src="calendar-lib.js"></script>
+<script defer src="edge.js"></script>
+<script defer src="monitor.js"></script>
+<script type="module" src="firebase.js"></script>
+<script defer src="app.js"></script>
+<script defer src="live.js"></script>
+<script src="faq.js"></script>
+<script defer src="translate.js"></script>
+<script defer src="sw-register.js"></script>
+</body>
+</html>

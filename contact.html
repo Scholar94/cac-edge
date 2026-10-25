@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Contact — CAC Good Works Assembly</title>
+  <link rel="preload" href="font-jost-latin.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="font-cinzel-latin.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="font-cormorant-latin.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="icons-solid.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="icons-regular.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href="icons-brands.woff2" as="font" type="font/woff2" crossorigin/>
+  <link rel="stylesheet" href="fonts.css"/>
+  <link rel="stylesheet" href="icons.css"/>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page-hero{padding:160px 0 80px;text-align:center;background:linear-gradient(135deg,#0a0a0f 0%,#1a1025 50%,#0d1520 100%);border-bottom:1px solid var(--dark-border);}
+    .page-hero h1{font-size:clamp(2.5rem,6vw,4rem);margin-bottom:16px;}
+    .contact-page{padding:100px 0;background:var(--dark-bg);}
+    .contact-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:60px;align-items:start;}
+    .contact-info{display:flex;flex-direction:column;gap:28px;}
+    .contact-info-card{background:var(--dark-card);border:1px solid var(--dark-border);border-radius:var(--radius);padding:24px 28px;display:flex;align-items:flex-start;gap:16px;transition:var(--transition);}
+    .contact-info-card:hover{border-color:var(--gold);transform:translateX(4px);}
+    .contact-info-icon{width:48px;height:48px;border-radius:12px;background:rgba(201,169,110,0.1);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+    .contact-info-text strong{display:block;color:var(--gold);font-size:0.8rem;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+    .contact-info-text p{color:var(--white-60);font-size:0.9rem;line-height:1.6;}
+    .social-connect{background:var(--dark-card);border:1px solid var(--dark-border);border-radius:var(--radius);padding:24px 28px;}
+    .social-connect h4{font-size:0.85rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+    .social-links-row{display:flex;gap:12px;flex-wrap:wrap;}
+    .social-link-btn{display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:8px;background:var(--dark-bg);border:1px solid var(--dark-border);color:var(--white-60);font-size:0.85rem;transition:var(--transition);}
+    .social-link-btn:hover{border-color:var(--gold);color:var(--gold);}
+    .contact-form-wrap{background:var(--glass-bg);backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:var(--radius-lg);padding:48px;position:relative;overflow:hidden;}
+    .contact-form-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient-gold);}
+    .contact-form-wrap h3{font-size:1.5rem;margin-bottom:8px;}
+    .contact-form-wrap p{color:var(--white-60);font-size:0.9rem;margin-bottom:32px;}
+    .map-section{padding:0 0 100px;}
+    @media(max-width:900px){.contact-grid{grid-template-columns:1fr;}}
+  </style>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#0a0a0f"/>
+  <link rel="icon" href="icon-64.png" type="image/png" sizes="64x64"/>
+  <link rel="apple-touch-icon" href="icon-180.png"/>
+<script src="theme.js"></script>
+  <!-- seo:start -->
+  <link rel="canonical" href="https://example.org/contact.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="CAC Good Works Assembly"/>
+  <meta property="og:url" content="https://example.org/contact.html"/>
+  <meta property="og:title" content="Contact — CAC Good Works Assembly"/>
+  <meta property="og:description" content="Contact — CAC Good Works Assembly"/>
+  <meta property="og:image" content="https://example.org/og-image.png"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <!-- seo:end -->
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<nav class="navbar" id="navbar" aria-label="Main">
+  <div class="nav-container">
+    <a href="index.html" class="nav-logo"><img class="logo-emblem" src="logo-mark.webp" width="44" height="44" alt="" decoding="async"><div class="logo-text"><span class="logo-main">CAC Good Works</span><span class="logo-sub">Assembly</span></div></a>
+    <ul class="nav-links" id="navLinks"><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="ministries.html">Ministries</a></li><li><a href="devotionals.html">Devotional</a></li><li><a href="sermons.html">Sermons</a></li><li><a href="events.html">Events</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="give.html">Give</a></li><li><a href="contact.html" class="active">Contact</a></li><li><a href="admin-login.html" class="nav-admin">Admin</a></li></ul>
+    <button type="button" class="hamburger" id="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div id="main" class="page-hero">
+  <div class="container">
+    <span class="section-tag">Reach Out</span>
+    <h1 class="animate-fade-up">Contact Us</h1>
+    <p class="animate-fade-up delay-1">We'd love to hear from you. Come worship with us or get in touch any time.</p>
+  </div>
+</div>
+
+<section class="contact-page">
+  <div class="container">
+    <div class="contact-grid">
+      <!-- INFO -->
+      <div class="contact-info">
+        <div class="contact-info-card">
+          <div class="contact-info-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <div class="contact-info-text"><strong>Address</strong><p>CAC Good Works Assembly<br>Lagos, Nigeria</p></div>
+        </div>
+        <div class="contact-info-card">
+          <div class="contact-info-icon"><i class="fas fa-phone-alt"></i></div>
+          <div class="contact-info-text"><strong>Phone</strong><p>+2348037188012<br>+2348079731695</p></div>
+        </div>
+        <div class="contact-info-card">
+          <div class="contact-info-icon"><i class="fas fa-envelope"></i></div>
+          <div class="contact-info-text"><strong>Email</strong><p>cacgoodworksassembly@gmail.com<br>pastor@cacgoodworks.org</p></div>
+        </div>
+        <div class="contact-info-card">
+          <div class="contact-info-icon"><i class="fas fa-clock"></i></div>
+          <div class="contact-info-text"><strong>Service Times</strong><p>Sunday: 8:15 AM <br>Wednesday: 5:00 PM<br>Last 3 days of month: Fasting &amp; Prayer</p></div>
+        </div>
+        <a href="https://wa.me/2348079731695?text=Hello%20CAC%20Good%20Works%20Assembly,%20I%20would%20like%20to%20make%20an%20enquiry." target="_blank" class="btn-whatsapp" style="justify-content:center;">
+          <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+        </a>
+        <div class="social-connect">
+          <h4>Follow Us</h4>
+          <div class="social-links-row">
+            <a href="#" data-net="facebook" class="social-link-btn"><i class="fab fa-facebook-f"></i> Facebook</a>
+            <a href="#" data-net="youtube" class="social-link-btn"><i class="fab fa-youtube"></i> YouTube</a>
+            <a href="#" data-net="instagram" class="social-link-btn"><i class="fab fa-instagram"></i> Instagram</a>
+            <a href="#" data-net="x" class="social-link-btn"><i class="fab fa-x-twitter"></i> Twitter</a>
+          </div>
+        </div>
+      </div>
+      <!-- FORM -->
+      <div class="contact-form-wrap">
+        <h3>Send Us a Message</h3>
+        <p>Fill the form below and a member of our team will respond within 24 hours.</p>
+        <form id="contactForm">
+          <div class="form-row">
+            <div class="form-group"><label for="contactName">Full Name</label><input type="text" id="contactName" placeholder="Your full name" required/></div>
+            <div class="form-group"><label for="contactEmail">Email Address</label><input type="email" id="contactEmail" placeholder="your@email.com" required/></div>
+          </div>
+          <div class="form-group"><label for="contactPhone">Phone Number</label><input type="tel" id="contactPhone" placeholder="+234 XXX XXXX XXX"/></div>
+          <div class="form-group">
+            <label for="contactSubject">Subject</label>
+            <select id="contactSubject" style="width:100%;padding:14px 18px;background:rgba(255,255,255,0.05);border:1px solid var(--dark-border);border-radius:8px;color:var(--white);font-size:0.9rem;transition:var(--transition);">
+              <option value="">Select a subject</option>
+              <option>General Enquiry</option><option>Prayer Request</option>
+              <option>Counselling</option><option>Partnership</option>
+              <option>Ministry Information</option><option>Donation</option>
+            </select>
+          </div>
+          <div class="form-group"><label for="contactMessage">Your Message</label><textarea id="contactMessage" rows="5" placeholder="Write your message here..." required></textarea></div>
+          <button type="submit" class="btn-primary full" id="contactSubmitBtn"><i class="fas fa-paper-plane"></i> Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section class="map-section">
+  <div class="container">
+    <div class="map-container">
+      <iframe src="https://www.google.com/maps?q=CAC+Good+Works+Assembly,+Ijebu-ode,+Ogun+State,+Nigeria&output=embed" width="100%" height="400" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Church Location"></iframe>
+    </div>
+  </div>
+</section>
+
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg"></span></div>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="footer-logo"><img class="logo-emblem" src="logo-mark.webp" width="44" height="44" alt="" decoding="async"><div class="logo-text"><span class="logo-main">CAC Good Works</span><span class="logo-sub">Assembly</span></div></div>
+        <p>Seeking God's manifest presence, leading people towards Christ-like nature.</p></div>
+      <div class="footer-links"><h4>Explore</h4><ul><li><a href="devotionals.html">Daily Devotional</a></li><li><a href="bible.html">Bible</a></li><li><a href="live.html">Live Service</a></li><li><a href="prayer-wall.html">Prayer Wall</a></li><li><a href="events.html">Events &amp; Calendar</a></li><li><a href="sermons.html">Sermons</a></li><li><a href="testimonies.html">Testimonies</a></li><li><a href="impact.html">Our Impact</a></li></ul></div>
+      <div class="footer-links"><h4>Get Involved</h4><ul><li><a href="visit.html">Plan Your Visit</a></li><li><a href="index.html#prayer">Prayer Request</a></li><li><a href="give.html">Give</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+      <div class="footer-links"><h4>Service Times</h4><ul><li><i class="fas fa-circle-dot"></i> Sunday 8:15 AM</li><li><i class="fas fa-circle-dot"></i> Wednesday 5:00 PM</li><li><i class="fas fa-circle-dot"></i> Times in Lagos (WAT)</li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 CAC Good Works Assembly. All Rights Reserved. · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></p></div>
+  </div>
+</footer>
+
+<button type="button" class="scroll-top" id="scrollTop" aria-label="Scroll to top"><i class="fas fa-chevron-up"></i></button>
+<a href="https://wa.me/2348079731695?text=Hello%20CAC%20Good%20Works%20Assembly,%20I%20would%20like%20to%20make%20an%20enquiry." target="_blank" class="floating-whatsapp" style="opacity:1;"><i class="fab fa-whatsapp"></i><span class="wa-tooltip">Chat with us on WhatsApp</span><div class="wa-ripple"></div></a>
+
+<script defer src="config.js"></script>
+<script defer src="calendar-lib.js"></script>
+<script defer src="edge.js"></script>
+<script defer src="monitor.js"></script>
+<script type="module" src="firebase.js"></script>
+<script defer src="app.js"></script>
+<script defer src="live.js"></script>
+<script src="contact.js"></script>
+<script defer src="translate.js"></script>
+<script defer src="sw-register.js"></script>
+</body>
+</html>
